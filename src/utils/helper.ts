@@ -102,6 +102,31 @@ export function randomPick<T>(array: T[], count: number): T[] {
 }
 
 /**
+ * 合并多组节点并按地址去重，先出现的组优先（保留其权重）
+ * 比较时忽略末尾斜杠的差异
+ *
+ * @author CaoMeiYouRen
+ * @date 2026-11-07
+ * @export
+ * @param groups
+ */
+export function mergeNodes(...groups: NodeConfig[][]): NodeConfig[] {
+    const seen = new Set<string>()
+    const result: NodeConfig[] = []
+    for (const group of groups) {
+        for (const node of group) {
+            const key = node.url.replace(/\/+$/, '')
+            if (seen.has(key)) {
+                continue
+            }
+            seen.add(key)
+            result.push(node)
+        }
+    }
+    return result
+}
+
+/**
  * 按权重随机挑选不重复的节点
  * 权重越高，被选中的概率越大
  *

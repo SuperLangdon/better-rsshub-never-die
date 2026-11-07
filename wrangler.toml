@@ -32,6 +32,15 @@ AUTH_KEY = ''
 # 可选值：loadbalance, failover, quickresponse
 # MODE = 'loadbalance'
 MAX_NODE_NUM = 6
+# 是否自动发现公共实例：从官方文档抓取实例列表，健康检查后加入节点池
+# 启用后若发现成功，则不再强制加入官方实例 https://rsshub.app
+AUTO_INSTANCE = 'false'
+# 发现结果的缓存时间(秒)，默认 1800
+# INSTANCE_TTL = 1800
+# 单个实例健康检查的超时时间(ms)，默认 10000
+# HEALTH_CHECK_TIMEOUT = 10000
+# 公共实例列表页面地址，默认为官方文档
+# INSTANCE_DOC_URL = 'https://docs.rsshub.app/zh/guide/instances'
 
 [env.dev]
 # Development 环境配置

@@ -13,6 +13,10 @@ export interface ProxyFetchOptions {
      */
     signal?: AbortSignal
     /**
+     * 附加到出站请求的请求头
+     */
+    headers?: Record<string, string>
+    /**
      * 响应体大小上限（字节）
      *
      * @default DEFAULT_MAX_RESPONSE_SIZE
@@ -231,6 +235,7 @@ async function readBodyWithLimit(response: Response, maxBytes: number) {
 export async function proxyFetch(input: string | URL, options: ProxyFetchOptions = {}): Promise<ProxyFetchResult> {
     const {
         signal,
+        headers,
         maxBytes = DEFAULT_MAX_RESPONSE_SIZE,
         maxRedirects = DEFAULT_MAX_REDIRECTS,
         allowedRedirectHosts = [],
@@ -244,6 +249,7 @@ export async function proxyFetch(input: string | URL, options: ProxyFetchOptions
         const response = await fetch(current, {
             redirect: 'manual',
             signal,
+            headers,
         })
         const location = response.headers.get('location')
         if (REDIRECT_STATUS.has(response.status) && location) {

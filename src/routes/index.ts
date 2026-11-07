@@ -3,7 +3,12 @@ import { env } from 'hono/adapter'
 import { StatusCode } from 'hono/utils/http-status'
 import { HTTPException } from 'hono/http-exception'
 import { Bindings } from '../types'
-import { constantTimeEqual, createAuthCode, NodeConfig, parseNodeUrls, weightedRandomPick } from '@/utils/helper'
+import { constantTimeEqual, createAuthCode, mergeNodes, NodeConfig, parseNodeUrls, weightedRandomPick } from '@/utils/helper'
+import {
+    DEFAULT_HEALTH_CHECK_TIMEOUT,
+    DEFAULT_INSTANCE_TTL_SECONDS,
+    getDiscoveredInstances,
+} from '@/utils/instances'
 import { DEFAULT_MAX_RESPONSE_SIZE, proxyFetch, ProxyFetchOptions } from '@/utils/proxy-fetch'
 import logger from '@/middlewares/logger'
 
@@ -13,7 +18,15 @@ const DEFAULT_NODE: NodeConfig = { url: 'https://rsshub.app', weight: 1 }
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.get('*', async (c) => {
-    const { RSSHUB_NODE_URLS, AUTH_KEY, MODE = 'loadbalance' } = env(c)
+    const {
+        RSSHUB_NODE_URLS,
+        AUTH_KEY,
+        MODE = 'loadbalance',
+        AUTO_INSTANCE,
+        INSTANCE_TTL,
+        HEALTH_CHECK_TIMEOUT,
+        INSTANCE_DOC_URL,
+    } = env(c)
     const MAX_NODE_NUM = Math.max(parseInt(env(c).MAX_NODE_NUM) || 6, 1) // 最大节点数
     const path = c.req.path
     const query = c.req.query()
@@ -39,9 +52,37 @@ app.get('*', async (c) => {
     }
 
     const parsedNodes = parseNodeUrls(RSSHUB_NODE_URLS)
+
+    // 自动发现公共实例：从官方文档抓取实例列表，健康检查后加入节点池
+    // 刷新在后台进行，不会阻塞当前请求； Workers 等运行时中通过 waitUntil 保活
+    const autoInstance = AUTO_INSTANCE === 'true'
+    const { nodes: discoveredNodes, refreshing: instanceRefreshTask } = autoInstance
+        ? getDiscoveredInstances({
+            docUrl: INSTANCE_DOC_URL || undefined,
+            ttl: (parseInt(INSTANCE_TTL) || DEFAULT_INSTANCE_TTL_SECONDS) * 1000,
+            timeout: parseInt(HEALTH_CHECK_TIMEOUT) || DEFAULT_HEALTH_CHECK_TIMEOUT,
+        })
+        : { nodes: [] as NodeConfig[], refreshing: undefined }
+    if (instanceRefreshTask) {
+        try {
+            c.executionCtx.waitUntil(instanceRefreshTask)
+        } catch {
+            // Node 等运行时没有 executionCtx，后台任务随进程存活，无需处理
+        }
+    }
+
     // 若用户未显式配置默认节点，则自动添加到节点池
     const hasDefaultNode = parsedNodes.some((n) => n.url === DEFAULT_NODE.url)
-    const allNodes = hasDefaultNode ? parsedNodes : [DEFAULT_NODE, ...parsedNodes]
+    // 发现模式下若成功获取到健康实例，则以「静态配置 + 健康实例」为节点池，
+    // 不再强制加入官方实例（官方实例现已限制访问，是否保留由显式配置决定）
+    let allNodes: NodeConfig[]
+    if (discoveredNodes.length > 0) {
+        allNodes = mergeNodes(parsedNodes, discoveredNodes)
+    } else if (hasDefaultNode) {
+        allNodes = parsedNodes
+    } else {
+        allNodes = [DEFAULT_NODE, ...parsedNodes]
+    }
 
     // 将 NodeConfig 转换为带路径和查询参数的完整 URL
     const makeUrl = (node: NodeConfig) => {

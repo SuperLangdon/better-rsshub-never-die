@@ -17,4 +17,12 @@ export type Bindings = {
     // 运行模式：负载均衡/自动容灾/快速响应
     MODE: 'loadbalance' | 'failover' | 'quickresponse'
     MAX_NODE_NUM: string
+    // 是否自动发现公共实例（从官方文档抓取并健康检查），true/false
+    AUTO_INSTANCE: string
+    // 发现结果的缓存时间（秒），默认 1800
+    INSTANCE_TTL: string
+    // 单个实例健康检查的超时时间（毫秒），默认 10000
+    HEALTH_CHECK_TIMEOUT: string
+    // 公共实例列表页面地址，默认为官方文档
+    INSTANCE_DOC_URL: string
 }

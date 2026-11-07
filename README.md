@@ -78,6 +78,16 @@ CACHE_MAX_AGE = 300
 RSSHUB_NODE_URLS = 'https://rsshub.rssforever.com, https://hub.slarker.me, https://rsshub.pseudoyu.com, https://rsshub.ktachibana.party, https://rsshub.woodland.cafe, https://rss.owo.nz, https://yangzhi.app, https://rsshub.henry.wang, https://rss.peachyjoy.top, https://rsshub.speednet.icu'
 # 最大实例节点数，默认为 6
 MAX_NODE_NUM=6
+# 是否自动发现公共实例：从官方文档抓取实例列表，健康检查后加入节点池
+# 启用后若发现成功，则不再强制加入官方实例 https://rsshub.app
+# 默认为 false
+AUTO_INSTANCE = 'false'
+# 发现结果的缓存时间(秒)，默认 1800
+# INSTANCE_TTL = 1800
+# 单个实例健康检查的超时时间(ms)，默认 10000
+# HEALTH_CHECK_TIMEOUT = 10000
+# 公共实例列表页面地址，默认为官方文档
+# INSTANCE_DOC_URL = 'https://docs.rsshub.app/zh/guide/instances'
 # 访问码，注意和 RSSHub 的 ACCESS_KEY 不是同一个。
 # 留空则不做限制
 # 公网部署建议设置，否则任何人都可以借用本服务访问节点池
@@ -226,6 +236,23 @@ RSSHUB_NODE_URLS='https://rsshub.rssforever.com, https://hub.slarker.me, https:/
 # Cloudflare Workers 平台限制 fetch 一次最多并发 6 个，总计 50 个子请求。所以快速响应模式下最多 6 个节点，其他模式最多 50 个节点。
 # 其他平台没有限制，以实际情况为准。
 MAX_NODE_NUM=6
+
+# 是否自动发现公共实例：从官方文档（公共实例页面）抓取实例列表，
+# 对每个实例做 /healthz 健康检查，仅保留健康的实例加入节点池。
+# 静态配置的 RSSHUB_NODE_URLS 始终保留（权重不变），发现的实例权重为 1。
+# 启用后若发现成功，则不再强制加入官方实例 https://rsshub.app。
+# 发现过程在后台进行，不阻塞请求；Node.js 部署会在启动时预热并定期刷新。
+# 默认为 false
+# AUTO_INSTANCE=false
+
+# 发现结果的缓存时间(秒)，默认 1800
+# INSTANCE_TTL=1800
+
+# 单个实例健康检查的超时时间(ms)，默认 10000
+# HEALTH_CHECK_TIMEOUT=10000
+
+# 公共实例列表页面地址，默认为官方文档
+# INSTANCE_DOC_URL='https://docs.rsshub.app/zh/guide/instances'
 
 # 缓存时间(秒)
 CACHE_MAX_AGE=300
