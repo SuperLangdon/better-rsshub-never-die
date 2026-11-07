@@ -72,6 +72,7 @@ ALLOW_PRIVATE_REDIRECTS = 'false'
 CACHE_MAX_AGE = 300
 # RSSHub 实例 的 URL 地址，使用英文逗号分隔。
 # 官方实例 https://rsshub.app 不用列出，默认添加。
+# 注意：AUTO_INSTANCE 为 true 时本配置不生效，部署时可保持默认值。
 # 每个实例可以通过竖线(|)分隔的参数进行配置：
 #   |weight=N  - 设置权重（默认为 1，数字越大被选中的概率越高）
 #   旧版 |priority / |backup 标记会被忽略，仅用于兼容历史配置
@@ -79,9 +80,10 @@ RSSHUB_NODE_URLS = 'https://rsshub.rssforever.com, https://hub.slarker.me, https
 # 最大实例节点数，默认为 6
 MAX_NODE_NUM=6
 # 是否自动发现公共实例：从官方文档抓取实例列表，健康检查后加入节点池
-# 启用后若发现成功，则不再强制加入官方实例 https://rsshub.app
-# 默认为 false
-AUTO_INSTANCE = 'false'
+# 设为 true 时忽略 RSSHUB_NODE_URLS，无需手动填写实例地址
+# 设为 false 时使用 RSSHUB_NODE_URLS 静态配置（官方实例自动加入）
+# 默认为 true
+AUTO_INSTANCE = 'true'
 # 发现结果的缓存时间(秒)，默认 1800
 # INSTANCE_TTL = 1800
 # 单个实例健康检查的超时时间(ms)，默认 10000
@@ -225,6 +227,7 @@ LOGFILES=false
 
 # RSSHub 实例 的 URL 地址，使用英文逗号分隔。
 # 官方实例 https://rsshub.app 不用列出，默认添加。
+# 注意：AUTO_INSTANCE 为 true 时本配置不生效，可留空。
 # 每个实例可以通过竖线(|)分隔的参数进行配置：
 #   |weight=N  - 设置权重（默认为 1，数字越大被选中的概率越高）
 #   旧版 |priority / |backup 标记会被忽略，仅用于兼容历史配置
@@ -239,8 +242,9 @@ MAX_NODE_NUM=6
 
 # 是否自动发现公共实例：从官方文档（公共实例页面）抓取实例列表，
 # 对每个实例做 /healthz 健康检查，仅保留健康的实例加入节点池。
-# 静态配置的 RSSHUB_NODE_URLS 始终保留（权重不变），发现的实例权重为 1。
-# 启用后若发现成功，则不再强制加入官方实例 https://rsshub.app。
+# 设为 true 时忽略 RSSHUB_NODE_URLS，节点池完全由发现的健康实例构成，
+# 部署时无需手动填写实例地址；首次刷新完成前会以官方实例兜底。
+# 设为 false 时使用 RSSHUB_NODE_URLS 静态配置（权重生效，官方实例自动加入）。
 # 发现过程在后台进行，不阻塞请求；Node.js 部署会在启动时预热并定期刷新。
 # 默认为 false
 # AUTO_INSTANCE=false

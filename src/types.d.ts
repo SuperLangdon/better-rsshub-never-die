@@ -5,7 +5,8 @@ export type Bindings = {
     LOG_LEVEL: string
     TIMEOUT: string
     MAX_BODY_SIZE: string
-    RSSHUB_NODE_URLS: string
+    // RSSHub 实例地址，AUTO_INSTANCE 为 true 时不生效
+    RSSHUB_NODE_URLS?: string
     CACHE_MAX_AGE: string
     AUTH_KEY: string
     // 响应体大小上限（字节），默认 10MB

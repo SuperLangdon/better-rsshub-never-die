@@ -15,6 +15,9 @@ import logger from '@/middlewares/logger'
 // 官方实例，默认加入节点池
 const DEFAULT_NODE: NodeConfig = { url: 'https://rsshub.app', weight: 1 }
 
+// 冷启动时等待首次实例发现的上限（毫秒）
+const COLD_START_MAX_WAIT_MS = 15000
+
 const app = new Hono<{ Bindings: Bindings }>()
 
 app.get('*', async (c) => {
@@ -51,29 +54,41 @@ app.get('*', async (c) => {
         }
     }
 
-    const parsedNodes = parseNodeUrls(RSSHUB_NODE_URLS)
-
     // 自动发现公共实例：从官方文档抓取实例列表，健康检查后加入节点池
-    // 刷新在后台进行，不会阻塞当前请求； Workers 等运行时中通过 waitUntil 保活
+    // 已有缓存时不阻塞请求； Workers 等运行时中通过 waitUntil 保活刷新任务
     const autoInstance = AUTO_INSTANCE === 'true'
-    const { nodes: discoveredNodes, refreshing: instanceRefreshTask } = autoInstance
+    // 自动发现开启时忽略 RSSHUB_NODE_URLS，节点池完全由发现的健康实例构成，
+    // 部署时无需手动填写实例地址
+    const parsedNodes = autoInstance ? [] : parseNodeUrls(RSSHUB_NODE_URLS ?? '')
+    const discovery = autoInstance
         ? getDiscoveredInstances({
             docUrl: INSTANCE_DOC_URL || undefined,
             ttl: (parseInt(INSTANCE_TTL) || DEFAULT_INSTANCE_TTL_SECONDS) * 1000,
             timeout: parseInt(HEALTH_CHECK_TIMEOUT) || DEFAULT_HEALTH_CHECK_TIMEOUT,
         })
         : { nodes: [] as NodeConfig[], refreshing: undefined }
-    if (instanceRefreshTask) {
+    if (discovery.refreshing) {
         try {
-            c.executionCtx.waitUntil(instanceRefreshTask)
+            c.executionCtx.waitUntil(discovery.refreshing)
         } catch {
             // Node 等运行时没有 executionCtx，后台任务随进程存活，无需处理
         }
+        if (!discovery.nodes.length) {
+            // 冷启动等待首次发现完成（有上限），避免首个请求落在兜底的官方实例上
+            await Promise.race([
+                discovery.refreshing.then((nodes) => {
+                    discovery.nodes = nodes
+                }),
+                new Promise<void>((resolve) => setTimeout(resolve, COLD_START_MAX_WAIT_MS)),
+            ])
+        }
     }
+    const discoveredNodes = discovery.nodes
 
     // 若用户未显式配置默认节点，则自动添加到节点池
+    // 自动发现模式下，首次刷新完成前节点池为空，此时保留官方实例作为兜底
     const hasDefaultNode = parsedNodes.some((n) => n.url === DEFAULT_NODE.url)
-    // 发现模式下若成功获取到健康实例，则以「静态配置 + 健康实例」为节点池，
+    // 若发现到健康实例，则以「静态配置 + 健康实例」为节点池，
     // 不再强制加入官方实例（官方实例现已限制访问，是否保留由显式配置决定）
     let allNodes: NodeConfig[]
     if (discoveredNodes.length > 0) {

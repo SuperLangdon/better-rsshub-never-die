@@ -56,7 +56,10 @@ export interface NodeConfig {
  * @export
  * @param value
  */
-export function parseNodeUrls(value: string): NodeConfig[] {
+export function parseNodeUrls(value?: string): NodeConfig[] {
+    if (!value) {
+        return []
+    }
     const seen = new Set<string>()
     const result: NodeConfig[] = []
     for (const entry of value.split(',')) {
