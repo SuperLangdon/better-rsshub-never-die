@@ -1,21 +1,21 @@
 <h1 align="center">rsshub-never-die </h1>
 <p>
-  <img alt="Version" src="https://img.shields.io/github/package-json/v/CaoMeiYouRen/rsshub-never-die.svg" />
+  <img alt="Version" src="https://img.shields.io/github/package-json/v/SuperLangdon/better-rsshub-never-die.svg" />
   <a href="https://hub.docker.com/r/caomeiyouren/rsshub-never-die" target="_blank">
     <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/caomeiyouren/rsshub-never-die">
   </a>
-  <a href="https://github.com/CaoMeiYouRen/rsshub-never-die/actions?query=workflow%3ARelease" target="_blank">
-    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/CaoMeiYouRen/rsshub-never-die/release.yml?branch=master">
+  <a href="https://github.com/SuperLangdon/better-rsshub-never-die/actions?query=workflow%3ARelease" target="_blank">
+    <img alt="GitHub Workflow Status" src="https://img.shields.io/github/actions/workflow/status/SuperLangdon/better-rsshub-never-die/release.yml?branch=master">
   </a>
   <img src="https://img.shields.io/badge/node-%3E%3D22.23.4-blue.svg" />
-  <a href="https://github.com/CaoMeiYouRen/rsshub-never-die#readme" target="_blank">
+  <a href="https://github.com/SuperLangdon/better-rsshub-never-die#readme" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
-  <a href="https://github.com/CaoMeiYouRen/rsshub-never-die/graphs/commit-activity" target="_blank">
+  <a href="https://github.com/SuperLangdon/better-rsshub-never-die/graphs/commit-activity" target="_blank">
     <img alt="Maintenance" src="https://img.shields.io/badge/Maintained%3F-yes-green.svg" />
   </a>
-  <a href="https://github.com/CaoMeiYouRen/rsshub-never-die/blob/master/LICENSE" target="_blank">
-    <img alt="License: MIT" src="https://img.shields.io/github/license/CaoMeiYouRen/rsshub-never-die?color=yellow" />
+  <a href="https://github.com/SuperLangdon/better-rsshub-never-die/blob/master/LICENSE" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/github/license/SuperLangdon/better-rsshub-never-die?color=yellow" />
   </a>
 </p>
 
@@ -26,7 +26,7 @@
 
 ## 🏠 主页
 
-[https://github.com/CaoMeiYouRen/rsshub-never-die#readme](https://github.com/CaoMeiYouRen/rsshub-never-die#readme)
+[https://github.com/SuperLangdon/better-rsshub-never-die#readme](https://github.com/SuperLangdon/better-rsshub-never-die#readme)
 
 
 ## 📦 依赖要求
@@ -44,7 +44,7 @@
 
 点击下方按钮一键部署到 Cloudflare Workers
 
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/CaoMeiYouRen/rsshub-never-die)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/SuperLangdon/better-rsshub-never-die)
 
 #### 手动部署
 
@@ -112,14 +112,14 @@ npm run build && npm run deploy:wrangler
 
 点击下方按钮一键部署到 Vercel。
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FCaoMeiYouRen%2Frsshub-never-die.git)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FSuperLangdon%2Fbetter-rsshub-never-die.git)
 
 ### Docker 镜像
 
 支持两种注册表：
 
 - Docker Hub: [`caomeiyouren/rsshub-never-die`](https://hub.docker.com/r/caomeiyouren/rsshub-never-die)
-- GitHub: [`ghcr.io/caomeiyouren/rsshub-never-die`](https://github.com/CaoMeiYouRen/rsshub-never-die/pkgs/container/rsshub-never-die)
+- GitHub: [`ghcr.io/superlangdon/better-rsshub-never-die`](https://github.com/SuperLangdon/better-rsshub-never-die/pkgs/container/rsshub-never-die)
 
 支持以下架构：
 
@@ -137,10 +137,10 @@ npm run build && npm run deploy:wrangler
 
 ### Docker Compose 部署
 
-下载 [docker-compose.yml](https://github.com/CaoMeiYouRen/rsshub-never-die/blob/master/docker-compose.yml)
+下载 [docker-compose.yml](https://github.com/SuperLangdon/better-rsshub-never-die/blob/master/docker-compose.yml)
 
 ```sh
-wget https://raw.githubusercontent.com/CaoMeiYouRen/rsshub-never-die/refs/heads/master/docker-compose.yml
+wget https://raw.githubusercontent.com/SuperLangdon/better-rsshub-never-die/refs/heads/master/docker-compose.yml
 ```
 
 检查有无需要修改的配置
@@ -164,7 +164,7 @@ docker-compose up -d
 
 ```sh
 # 下载源码
-git clone https://github.com/CaoMeiYouRen/rsshub-never-die.git  --depth=1
+git clone https://github.com/SuperLangdon/better-rsshub-never-die.git  --depth=1
 cd rsshub-never-die
 # 安装依赖
 pnpm i --frozen-lockfile
@@ -331,7 +331,7 @@ pnpm run commit
 
 ## 🤝 贡献
 
-欢迎 贡献、提问或提出新功能！<br />如有问题请查看 [issues page](https://github.com/CaoMeiYouRen/rsshub-never-die/issues). <br/>贡献或提出新功能可以查看[contributing guide](https://github.com/CaoMeiYouRen/rsshub-never-die/blob/master/CONTRIBUTING.md).
+欢迎 贡献、提问或提出新功能！<br />如有问题请查看 [issues page](https://github.com/SuperLangdon/better-rsshub-never-die/issues). <br/>贡献或提出新功能可以查看[contributing guide](https://github.com/SuperLangdon/better-rsshub-never-die/blob/master/CONTRIBUTING.md).
 
 ## 💰 支持
 
@@ -345,12 +345,12 @@ pnpm run commit
 
 ## 🌟 Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=CaoMeiYouRen/rsshub-never-die&type=Date)](https://star-history.com/#CaoMeiYouRen/rsshub-never-die&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=SuperLangdon/better-rsshub-never-die&type=Date)](https://star-history.com/#SuperLangdon/better-rsshub-never-die&Date)
 
 ## 📝 License
 
 Copyright © 2024 [CaoMeiYouRen](https://github.com/CaoMeiYouRen).<br />
-This project is [MIT](https://github.com/CaoMeiYouRen/rsshub-never-die/blob/master/LICENSE) licensed.
+This project is [MIT](https://github.com/SuperLangdon/better-rsshub-never-die/blob/master/LICENSE) licensed.
 
 ***
 _This README was generated with ❤️ by [cmyr-template-cli](https://github.com/CaoMeiYouRen/cmyr-template-cli)_

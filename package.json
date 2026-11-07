@@ -87,13 +87,13 @@
     "Cloudflare Workers",
     "Docker"
   ],
-  "homepage": "https://github.com/CaoMeiYouRen/rsshub-never-die#readme",
+  "homepage": "https://github.com/SuperLangdon/better-rsshub-never-die#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CaoMeiYouRen/rsshub-never-die.git"
+    "url": "git+https://github.com/SuperLangdon/better-rsshub-never-die.git"
   },
   "bugs": {
-    "url": "https://github.com/CaoMeiYouRen/rsshub-never-die/issues"
+    "url": "https://github.com/SuperLangdon/better-rsshub-never-die/issues"
   },
   "dependencies": {
     "@hono/node-server": "^2.0.12",
